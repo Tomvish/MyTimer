@@ -4,7 +4,7 @@ from  tkinter import  ttk
 import time
 import  re
 
-index = 1  # 60 - минуты, 1 - секунды для проверки
+index = 60  # 60 - минуты, 1 - секунды для проверки
 step = False #True
 work_time = 1  # Уст. по-умолчанию в функции start.
 rest_time = 1
@@ -13,9 +13,13 @@ work_day = 1    # час
 # def option():
 #     tk.messagebox.askyesnocancel('Укажите время', f"запустить {spin}")
 
-def is_valid(newal):
+def is_valid(newal, op):
     # try:
-    result = re.match("\d{0,3}$", newal)# is not None # TODO настроить проверку более одной цифры
+    result = re.match("^\d{0,3}$", newal) is not None #
+    if op=="key":
+        err_lbl.configure(text=newal)
+    elif op=="focus":
+        err_lbl.configure(text="focus")
     if not result or len(newal) >=3:
         errmsg=("Рекомендуется делать перерывы")
         print("Рекомендуется делать перерывы")
@@ -45,7 +49,7 @@ def start():
     # Обработка клика кнопки старт/отдых
     if step: # работа
         print(f'Тип: {type(work_time)} введено: {work_time}') ### при if
-        btnStart.configure(text='Отдых', bg='red', default='active',) # command=option) #text[1]) #
+        btnStart.configure(text='Отдых', bg='magenta', default='active',) # command=option) #text[1]) #
         lbl.configure(text=('Удачи в работе!'))
         ent_work.configure(bg='yellow')
         ent_rest.configure(bg='white')
@@ -71,7 +75,7 @@ def timer(work_time, rest_time):
         # Запустим таймер для рабочего интервала.
         start_work = time.time()
         elapse_work_time = 0
-        while elapse_work_time <= work_time * index -1 and step: #7: #
+        while elapse_work_time <= work_time * index -1 and step: # -1 на издержки запуска
             elapse_work_time = time.time() - start_work
             mins, secs = divmod(work_time * index - elapse_work_time, index)
 
@@ -87,17 +91,17 @@ def timer(work_time, rest_time):
         # Запустите таймер для интервала отдыха.
         start_rest = time.time()  # Отмерять отдых с этой секунды
         elapse_rest_time = 0  # установить истёкшее время = 0
-        print('старт отдыха:', start_rest)
-        while elapse_rest_time <= rest_time * index :
-            elapse_rest_time = time.time() - start_rest -1
-            mins, secs = divmod(rest_time * index - elapse_rest_time+1, index)
+        print('старт отдыха:', start_rest//60)
+        while elapse_rest_time <= rest_time * index -1: # -1 на издержки запуска, иначе уходит в -1.
+            elapse_rest_time = time.time() - start_rest
+            mins, secs = divmod(rest_time * index - elapse_rest_time, index)
             txt = f'{int(mins)}:{int(secs)}' # Табло Ещё отдохнуть
             lbl_tablo.configure(text=txt)
             print(txt)
             time.sleep(1)
             win.update()
         lbl.configure(text=("Отдых окончен!"))
-        print('"Отдых окончен!"', elapse_rest_time, 'end:', time.time() ) ###
+        print('"Отдых окончен!"', elapse_rest_time, 'end:', time.time()//60 ) ###
         print(step, 'rest')
         # step = not step
         ########################
@@ -123,7 +127,7 @@ err_lbl = tk.Label(frm, text="***",  bg='green', )
 
 btnStart = tk.Button(frmb, text='<<< Дело-Отдых >>>', width=20, command=start)
 
-check = (win.register(is_valid), "%P")
+check = (win.register(is_valid), "%P", "%V")
 
 ent_work = tk.Entry(frmb, validate='key', validatecommand=check, width=5)
 ent_rest = tk.Entry(frmb, validate='key', validatecommand=check, width=5)
