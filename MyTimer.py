@@ -21,7 +21,7 @@ def is_valid(newal, op):
     elif op=="focus":
         err_lbl.configure(text="focus")
     if not result or len(newal) >=3:
-        errmsg=("Рекомендуется делать перерывы")
+        errmsg=("Чаще делайте перерывы") #("     Рекомендуется делать перерывы     ")
         print("Рекомендуется делать перерывы")
         err_lbl.configure(text=(errmsg), bg='orange',)
     else:
@@ -40,16 +40,18 @@ def start():
         work_time = 25 # Это работа по-умолчанию, если не введено пользователем.
     else:
         work_time = int(work_time)
+    work_lbl.configure(text=work_time)
     rest_time = ent_rest.get()
     if rest_time == "":
         rest_time = 5 # Это отдых по-умолчанию, если не введено пользователем.
     else:
         rest_time = int(rest_time)
+    rest_lbl.configure(text=rest_time)
 
     # Обработка клика кнопки старт/отдых
     if step: # работа
         print(f'Тип: {type(work_time)} введено: {work_time}') ### при if
-        btnStart.configure(text='Отдых', bg='magenta', default='active',) # command=option) #text[1]) #
+        btnStart.configure(text='Отдых', bg='orange', default='active',) # command=option) #text[1]) #
         lbl.configure(text=('Удачи в работе!'))
         ent_work.configure(bg='yellow')
         ent_rest.configure(bg='white')
@@ -57,7 +59,7 @@ def start():
     else: # отдых
         print(f'Тип: {type(rest_time)} введено: {rest_time}') ### при else
         btnStart.configure(text='Старт', bg='yellow', default='normal') #text[0]) #
-        lbl.configure(text=('Отдохни!'))
+        lbl.configure(text=('          Отдохни!           '))
         print("Пауза,'Отдохни!' ") #, elapse_rest_time) ###
         ent_work.configure(bg='white')
         ent_rest.configure(bg='green')
@@ -68,7 +70,8 @@ def start():
 def timer(work_time, rest_time):
 
     while step:
-        lbl.configure(text=('Начинаем работу!'), bg='orange')
+        # lbl.configure(text=('   Начинаем работу!   '), bg='orange')
+        err_lbl.configure(text="с хорошим настроением")
         print('Начинаем работу!') ###
         start_time = time.time()
 
@@ -119,11 +122,13 @@ win.geometry('235x152-150-205')  #######
 # spin = tk.Spinbox(win, from_=0, to=100, width=5,) # textvariable=var)
 
 frm = tk.Frame(win, width=15, height=3, relief=tk.RIDGE, bg='green', borderwidth=4,)
-frmb = tk.Frame(win, width=15, height=3, relief=tk.RIDGE, borderwidth=4,) # bg='green',SUNKEN
+frmb = tk.Frame(win, width=15, height=3, relief=tk.RIDGE, bg='green', borderwidth=4,) # bg='green',SUNKEN
 
 lbl = tk.Label(frm, text='Время вперёд', bg='green', anchor='nw', font=('Arial Bold', 16), height=1)
 lbl_tablo = tk.Label(frm, text='12:13:14',  anchor='center', font=('Arial Bold', 35), width=8, height=1)
-err_lbl = tk.Label(frm, text="***",  bg='green', )
+err_lbl = tk.Label(frmb, text="***",  bg='green', )
+work_lbl = tk.Label(frmb, text=work_time,  bg='green', width=3)
+rest_lbl = tk.Label(frmb, text=rest_time,  bg='green', width=3)
 
 btnStart = tk.Button(frmb, text='<<< Дело-Отдых >>>', width=20, command=start)
 
@@ -134,11 +139,15 @@ ent_rest = tk.Entry(frmb, validate='key', validatecommand=check, width=5)
 
 frm.pack(fill=tk.Y,  side=tk.TOP,)
 frmb.pack(fill=tk.Y,  side=tk.BOTTOM,)
-lbl.pack(fill=tk.Y)
-lbl_tablo.pack()
-err_lbl.pack(fill=tk.Y,)
-ent_work.grid(column=0, row=0, sticky='w' )
-btnStart.grid(column=1, row=0, sticky='s' )
-ent_rest.grid(column=2, row=0, sticky='e' )
+
+lbl.grid(row=0, )
+lbl_tablo.grid(row=1, column=0, sticky='s')
+err_lbl.grid(column=1, row=0, sticky='n')
+work_lbl.grid(column=0, row=0,  sticky='w')
+rest_lbl.grid(column=2, row=0, sticky='e')
+
+ent_work.grid(column=0, row=1, sticky='w' )
+btnStart.grid(column=1, row=1, sticky='s' )
+ent_rest.grid(column=2, row=1, sticky='e' )
 #
 win.mainloop()
