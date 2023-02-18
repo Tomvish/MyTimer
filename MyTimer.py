@@ -15,11 +15,11 @@ def option():
 
 def is_valid(newal):
     # try:
-    result = re.match("\d$", newal) is not None
+    result = re.match("\d$", newal) is not None # TODO настроить проверку более одной цифры
     if not result or len(newal) >=4:
         errmsg=("Рекомендуется делать перерывы")
         print("Рекомендуется делать перерывы")
-        err_lbl.configure(text=(errmsg), bg='orange')
+        err_lbl.configure(text=(errmsg), bg='orange',)
     else:
         err_lbl.configure(text="норм", )
     return result
@@ -46,7 +46,7 @@ def start():
     else: # отдых
         btnStart.configure(text='Старт', bg='yellow', default='normal') #text[0]) #
         lbl.configure(text=('Отдохни!'))
-        print("Пауза,'Отдохни!' ", elaps2eTime2)
+        print("Пауза,'Отдохни!' ", elapse_rest_time)
         ent_work.configure(bg='white')
         ent_rest.configure(bg='green')
         # timer(work_time, rest_time)
@@ -61,31 +61,31 @@ def timer(work_time, rest_time):
 
         # Запустите таймер для рабочего интервала.
         start_work = time.time()
-        elapseTime1 = 0
-        while elapseTime1 <= work_time * index -1: #7: #
-            elapseTime1 = time.time() - start_work
-            mins, secs = divmod(work_time * index - elapseTime1, index)
+        elapse_work_time = 0
+        while elapse_work_time <= work_time * index -1: #7: #
+            elapse_work_time = time.time() - start_work
+            mins, secs = divmod(work_time * index - elapse_work_time, index)
 
             txt = f'{int(mins)}:{int(secs)}' # Ещё поработать
             lbl_tablo.configure(text=txt)
             time.sleep(1)
             win.update()
         lbl.configure(text=("Время отдохнуть!"), bg='green')
-        print("Время отдохнуть!",elapseTime1 )
+        print("Время отдохнуть!",elapse_work_time )
         print(step, '1')
 
         # Запустите таймер для интервала отдыха.
-        start_rest = time.time()  # Start timer for break interval
-        elaps2eTime2 = 0  # Initialize elapseTime as 0
-        while elaps2eTime2 <= rest_time * index :
-            elaps2eTime2 = time.time() - start_rest -1
-            mins, secs = divmod(rest_time * index - elaps2eTime2+1, index)
+        start_rest = time.time()  # Отмерять отдых с этой секунды
+        elapse_rest_time = 0  # установить истёкшее время = 0
+        while elapse_rest_time <= rest_time * index :
+            elapse_rest_time = time.time() - start_rest -1
+            mins, secs = divmod(rest_time * index - elapse_rest_time+1, index)
             txt = f'{int(mins)}:{int(secs)}' # \nЕщё отдохнуть
             lbl_tablo.configure(text=txt)
             time.sleep(1)
             win.update()
         lbl.configure(text=("Отдых окончен!"))
-        print('"Отдых окончен!"', elaps2eTime2 )
+        print('"Отдых окончен!"', elapse_rest_time )
         # step = not step
         ########################
 win = tk.Tk()
@@ -105,7 +105,7 @@ frmb = tk.Frame(win, width=15, height=3, relief=tk.RIDGE, borderwidth=4,) # bg='
 
 lbl = tk.Label(frm, text='Время вперёд', bg='green', anchor='nw', font=('Arial Bold', 16), height=1)
 lbl_tablo = tk.Label(frm, text='12:13:14',  anchor='center', font=('Arial Bold', 35), width=8, height=1)
-err_lbl = tk.Label(frm, text="***",  bg='green')
+err_lbl = tk.Label(frm, text="***",  bg='green', )
 
 btnStart = tk.Button(frmb, text='<<< Дело-Отдых >>>', width=20, command=start)
 
@@ -116,9 +116,9 @@ ent_rest = tk.Entry(frmb, width=5)
 
 frm.pack(fill=tk.Y,  side=tk.TOP,)
 frmb.pack(fill=tk.Y,  side=tk.BOTTOM,)
-lbl.pack()
+lbl.pack(fill=tk.Y)
 lbl_tablo.pack()
-err_lbl.pack()
+err_lbl.pack(fill=tk.Y,)
 ent_work.grid(column=0, row=0, sticky='w' )
 btnStart.grid(column=1, row=0, sticky='s' )
 ent_rest.grid(column=2, row=0, sticky='e' )

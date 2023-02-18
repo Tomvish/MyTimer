@@ -37,24 +37,24 @@ rest_btn.grid()
 # root.update()
 
 # работа !!!
-start1= time.time()
-elapseTime1= 0
-while elapseTime1 < work_time*index:
-    elapseTime1= time.time()-start1
-    mins, secs= divmod(work_time*index-elapseTime1,index)
+start1 = time.time()  # Отмерять работу с текущей секунды
+elapse_work_time = 0
+while elapse_work_time < work_time*index:
+    elapse_work_time= time.time()-start1
+    mins, secs= divmod(work_time*index-elapse_work_time,index)
 
     txt = f'\nЕщё поработать:{int(mins)}:{int(secs)}'
-    work_btn.configure(text = txt, bg='orange', default='active')
+    work_btn.configure(text=txt, bg='orange', default='active')
     time.sleep(1)
     root.update()
 work_btn.configure(text =("\nВремя отдохнуть!"), bg='yellow', default='normal')
 
 # Отдых !!!
-start2 = time.time ()                                   # Start timer for break interval
-elaps2eTime2= 0                                         # Initialize elapseTime as 0
-while elaps2eTime2 < rest_time*index:
-    elaps2eTime2= time.time()-start2
-    mins, secs= divmod(rest_time*index-elaps2eTime2,index)
+start2 = time.time()                                   # Отмерять отдых с этой секунды
+elapse_rest_time = 0                                         # установить истёкшее время = 0
+while elapse_rest_time < rest_time*index:
+    elapse_rest_time = time.time()-start2
+    mins, secs= divmod(rest_time*index-elapse_rest_time,index)
     txt = f'\nОтдыхаем:{int(mins)}:{int(secs)}'
     rest_btn.configure(text=txt, bg='green', anchor='n', default='active')
     time.sleep(1)
